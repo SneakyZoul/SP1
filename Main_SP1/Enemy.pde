@@ -21,15 +21,21 @@ class Enemy
     
      // random chance (~25% chance) for at enemy flytter sig i en tilfældig retning. 
 
+   
     
-    if (xDistance > yDistance)
-    {
-    //opdater x værdi til  at rykke flet nærmere playeren; 
-    Math.abs(player.x-x); 
+    
+ 
+    
+    
+    
+    
+    if (xDistance < yDistance) x++;
+    else if(xDistance > yDistance) x--;
+
+
+if(yDistance < xDistance) y++;
+else if(yDistance > xDistance) y--;
     } 
-    else
-   {
-    // opdater y værdi at rykke et felt nærmere player; 
+//       {
+//    // opdater y værdi at rykke et felt nærmere player; 
   }
- }
-}

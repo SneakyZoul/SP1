@@ -1,25 +1,31 @@
 int size = 40; 
 int [][] grid = new int[25][25];
+int speed =0; 
 
 Player player; 
 Enemy enemy; 
+Food food; 
 
 void setup()
 {
   size(1001, 1001);
 
-  player = new Player(5,6); 
+  player = new Player(5, 6); 
   enemy = new Enemy(20, 10, player); 
-  
+  food = new Food(2, 5, player); 
+
   //grid[5][7] = 3;
 } 
 void draw() 
 { 
   clearBord(); 
-  player(); 
+  theUnits(); 
   drawBorad();
-  //enemy(); 
-  
+  resolveCollisions();
+  UI();
+  println(player.score); 
+  println(player.health);
+  gameOver();
 } 
 
 
@@ -29,7 +35,7 @@ void clearBord()
   {
     for (int y = 0; y< grid[0].length; y++)
     {
-      grid[x][y] = 0; 
+      grid[x][y] = 0;
     }
   }
 }
@@ -41,7 +47,7 @@ void drawBorad()
     for (int y = 0; y< grid[0].length; y++)
     {
       fill(getColorFromType(grid[x][y])); 
-      
+
       rect(x * size, y * size, size, size );
     }
   }
@@ -59,40 +65,71 @@ void drawBorad()
 //  }
 //}
 
-
-
-//the player
-  void player() {
-    grid[player.x][player.y] = player.coll;
-    player.takenDamage(); 
-     grid[enemy.x][enemy.y] = enemy.coll; 
-    enemy.MoveTowardsPlayer();
-   
+void resolveCollisions() {
+  if (player.x == food.x && player.y == food.y) {
+    player.increaseScore();
+    food = new Food(int(random(0, 25)), int (random(0, 25)), player);
+  } else {
   }
-   
+  if (player.x == enemy.x && player.y == enemy.y) {
+    player.takenDamage();
+  }
+  if ( player.health == -1) {
+    gameOver();
+  }
+}
+
+
+//the units 
+void theUnits() 
+{
+try
+{
+  grid[player.x][player.y] = player.coll;
+  grid[enemy.x][enemy.y] = enemy.coll;  
+  enemy.MoveTowardsPlayer();  
+  grid[food.x][food.y] = food.coll;
+}
+catch(ArrayIndexOutOfBoundsException e)
+{
+}
+}
+
+void moveToAndFromPlayer()
+{
+  if (player.x < 0){
+    enemy.x = player.x; 
+    speed = speed -1; 
+  }
+  if (player.y < 0){ 
+    enemy.y = player.y; 
+    speed = speed +1; 
+    
+}
+}
 
 //color change
 
 color getColorFromType(int coll)
 { 
   color c = color(255); 
-   
+
   switch(coll)
   {
-   case 0:
-     c = color(127); 
-      break; 
-   case 1: 
-    c = color(255,0,0);
-      break; 
-   case 2: 
-   c = color(0,255,0); 
-       break; 
-   case 3: 
-   c = color(0,0,255); 
-       break; 
-   case 4: 
-   c = color(100,50,0); 
+  case 0:
+    c = color(127); 
+    break; 
+  case 1: 
+    c = color(255, 0, 0);
+    break; 
+  case 2: 
+    c = color(0, 255, 0); 
+    break; 
+  case 3: 
+    c = color(0, 0, 255); 
+    break; 
+  case 4: 
+    c = color(100, 50, 0);
   }
   return c;
 }
@@ -100,20 +137,68 @@ color getColorFromType(int coll)
 //player kontroll. 
 void keyPressed()
 {  
-    if (key == 'w') 
-    {
-      player.y--;
+  if (key == 'w') 
+  {
+    player.y--;
+  }
+  if (key == 's') 
+  {
+    player.y++;
+  }
+  if (key == 'd')
+  {
+    player.x++;
+  } 
+  if (key == 'a')
+  {
+    player.x--;
+  }
+}
+
+
+
+//Dynamci HP Bar & Dynamic Scoreboard
+void UI() {
+  stroke(0);
+  fill(150, 200);
+  rect(20, 20, 110, 80); 
+
+  textSize(20);
+  fill(200, 250);
+  text("HP", 32, 40);
+  fill(0);
+  text("HP", 30, 40);
+
+  fill(200, 0, 0, 230);
+  rect(25, 50, player.health, 40);
+  if (player.health > 0) {
+    rect(25, 50, player.health, 40);
+  } else if ( player.health <= 0) { 
+    player.health = 0; 
+  } 
+
+  stroke(0); 
+  fill(150, 200);
+  rect(890, 20, 100, 50);
+  textSize(20); 
+
+  fill(200, 250); 
+  text("SCORE", 893, 40);
+  fill(0); 
+  text("SCORE", 895, 40); 
+  textSize(25);
+  fill(200, 200, 0);
+  text(player.score, 890, 65);
+}
+
+//Dynamic scoreboard
+
+void gameOver() { 
+  if (player.health <= 0) {
+    textSize(100);
+    text( " GAMER OVER! ", 200, 200);
+    if (player.health <=0 && key == 'r' ) {
+      setup();
     }
-    if (key == 's') 
-    {
-    player.y++; 
-    }
-    if (key == 'd')
-    {
-      player.x++;
-    } 
-    if (key == 'a')
-    {
-      player.x--; 
-    } 
-} 
+  }
+}
