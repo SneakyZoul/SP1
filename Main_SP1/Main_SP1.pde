@@ -225,7 +225,7 @@ void gameOver() {
     text( " GAMER OVER! ", 200, 200);
     noLoop();
   }
-  if (player.score == 10) {
+  if (player.score == 25) {
     textSize(100);
     text(" YOU WIN!", 200, 200);
     noLoop();
