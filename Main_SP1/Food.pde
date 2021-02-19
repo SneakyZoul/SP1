@@ -2,25 +2,26 @@ class Food
 { 
 
   // data:
-int x;
-int y;
-int coll = 2;  
-Player player;
-//- Player // en reference til player objektet, for at kunne måle afstand.
+  int x;
+  int y;
+  int coll = 2;  
+  Player player;
+  int moveTimer;
 
 
 
 
 
- Food(int x, int y, Player player)
-{
-  this.x = x; 
-  this.y = y; 
-  this.player = player;
+  Food(int x, int y, Player player)
+  {
+    this.x = x; 
+    this.y = y; 
+    this.player = player;
+    frameRate(15);
+  }
+  void moveAwayFromPLayer() { 
 
-}
-void moveAwayFromPLayer(){ 
-   
+
 
     int xDistance = Math.abs(player.x+x);
     int yDistance = Math.abs(player.y+y); 
@@ -33,13 +34,13 @@ void moveAwayFromPLayer(){
         {
           if (y < 24 ) 
           {
-          y++;
+            y++;
           }
         } else
         {
           if ( y > 0)
           {
-          y--;
+            y--;
           }
         }
       } else { 
@@ -58,8 +59,5 @@ void moveAwayFromPLayer(){
       }
     }
   }
-}
 
-//Food (int x, int y) 
-//- Constructor() // sætter x, y og player variablerne.
-//- MoveAwayFromPlayer() // sætter ny x og y værdi. Der skal være 25% chance for at food bevæger sig i en tilfældig retning.
+}

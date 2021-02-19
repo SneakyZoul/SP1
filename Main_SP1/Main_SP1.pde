@@ -14,7 +14,7 @@ void setup()
   size(1001, 1001);
 
   player = new Player(5, 6); 
-  food = new Food(2, 5, player); 
+  food = new Food(20, 20, player); 
   enemy = new Enemy(20, 10, player); 
   enemy2 = new Enemy(19, 9, player); 
   enemy3 = new Enemy(19, 9, player); 
@@ -33,7 +33,7 @@ void draw()
   gameOver();
 } 
 
-
+//removing the player, and enemy so it dosn't
 void clearBord() 
 { 
   for ( int x = 0; x < grid.length; x++)
@@ -44,7 +44,7 @@ void clearBord()
     }
   }
 }
-
+//the gameborad and the grid
 void drawBorad() 
 { 
   for ( int x = 0; x < grid.length; x++)
@@ -58,18 +58,18 @@ void drawBorad()
   }
 }
 
-
-//void initRandomValues() 
-//{ 
-//  for ( int x = 0; x < grid.length; x++)
-//  {
-//    for (int y = 0; y< grid[0].length; y++)
-//    {
-//grid[x][y] = (int)random(0,5);
-//    }
-//  }
-//}
-
+//numbers
+void initRandomValues() 
+{ 
+  for ( int x = 0; x < grid.length; x++)
+  {
+    for (int y = 0; y< grid[0].length; y++)
+    {
+      grid[x][y] = (int)random(0, 5);
+    }
+  }
+}
+//Damage, Score, Health
 void resolveCollisions() {
   if (player.x == food.x && player.y == food.y) {
     player.increaseScore();
@@ -79,7 +79,7 @@ void resolveCollisions() {
   if (player.x == enemy.x && player.y == enemy.y) {
     player.takenDamage();
   }
-  if ( player.health == -1) {
+  if ( player.health <= 0) {
     gameOver();
   }
 }
@@ -89,40 +89,30 @@ void resolveCollisions() {
 //the units 
 void theUnits() 
 {
-  try
-  {
-    grid[player.x][player.y] = player.coll;
-    grid[enemy.x][enemy.y] = enemy.coll;  
 
-    enemy.MoveTowardsPlayer();  
-    if (player.score >= 4) {
-      grid[enemy2.x] [enemy2.y] = enemy2.coll;
-      enemy2.MoveTowardsPlayer();
-    }
-    if (player.score >= 8) {
-      grid[enemy3.x] [enemy3.y] = enemy3.coll;
-      enemy3.MoveTowardsPlayer();
-    }
-    if (player.score >= 10) {
-      grid[enemy4.x] [enemy4.y] = enemy4.coll;
-      enemy4.MoveTowardsPlayer();
-    }
-    if (player.score >= 15) {
-      grid[enemy5.x] [enemy5.y] = enemy5.coll;
-      enemy5.MoveTowardsPlayer();
-    }
-    food.moveAwayFromPLayer();
-    grid[food.x][food.y] = food.coll;
+  grid[player.x][player.y] = player.coll;
+  grid[enemy.x][enemy.y] = enemy.coll;  
+
+  enemy.MoveTowardsPlayer();  
+  if (player.score >= 4) {
+    grid[enemy2.x] [enemy2.y] = enemy2.coll;
+    enemy2.MoveTowardsPlayer();
   }
-  catch(ArrayIndexOutOfBoundsException e)
-  {
+  if (player.score >= 8) {
+    grid[enemy3.x] [enemy3.y] = enemy3.coll;
+    enemy3.MoveTowardsPlayer();
   }
+  if (player.score >= 10) {
+    grid[enemy4.x] [enemy4.y] = enemy4.coll;
+    enemy4.MoveTowardsPlayer();
+  }
+  if (player.score >= 15) {
+    grid[enemy5.x] [enemy5.y] = enemy5.coll;
+    enemy5.MoveTowardsPlayer();
+  }
+  grid[food.x][food.y] = food.coll;
+  food.moveAwayFromPLayer();
 }
-
-
-
-
-
 
 //color change
 
@@ -153,80 +143,91 @@ color getColorFromType(int coll)
 //player kontroll. 
 void keyPressed()
 {  
-  if (key == 'w') 
+  if (key == 'w' || key == 'A') 
   {
     if (player.y > 0)
     {
       player.y--;
     }
   }
-  if (key == 's') 
+  if (key == 's' || key == 'S') 
   {
     if ( player.y < 24)
     {
       player.y++;
     }
   }
-  if (key == 'd')
+  if (key == 'd' || key == 'D')
   {
     if (player.x < 24)
     {
       player.x++;
     }
   } 
-  if (key == 'a')
+  if (key == 'a' || key == 'A')
   {
     if ( player.x > 0)
     {
       player.x--;
     }
   }
-  }
+}
 
 
 
-  //Dynamci HP Bar & Dynamic Scoreboard
-  void UI() {
-    stroke(0);
-    fill(150, 200);
-    rect(20, 20, 110, 80); 
+//Dynamci HP Bar & Dynamic Scoreboard
+void UI() {
+  stroke(0);
+  fill(150, 200);
+  rect(20, 20, 110, 80); 
 
-    textSize(20);
-    fill(200, 250);
-    text("HP", 32, 40);
-    fill(0);
-    text("HP", 30, 40);
+  textSize(20);
+  fill(200, 250);
+  text("HP", 32, 40);
+  fill(0);
+  text("HP", 30, 40);
 
-    fill(200, 0, 0, 230);
+  fill(200, 0, 0, 230);
+  rect(25, 50, player.health, 40);
+  if (player.health > 0) {
     rect(25, 50, player.health, 40);
-    if (player.health > 0) {
-      rect(25, 50, player.health, 40);
-    } else if ( player.health <= 0) { 
-      player.health = 0;
-    } 
+  } else if ( player.health <= 0) { 
+    player.health = 0;
+  } 
 
-    stroke(0); 
-    fill(150, 200);
-    rect(890, 20, 100, 50);
-    textSize(20); 
+  stroke(0); 
+  fill(150, 200);
+  rect(890, 20, 100, 50);
+  textSize(20); 
 
-    fill(200, 250); 
-    text("SCORE", 893, 40);
-    fill(0); 
-    text("SCORE", 895, 40); 
-    textSize(25);
-    fill(200, 200, 0);
-    text(player.score, 890, 65);
+  fill(200, 250); 
+  text("SCORE", 893, 40);
+  fill(0); 
+  text("SCORE", 895, 40); 
+  textSize(25);
+  fill(200, 200, 0);
+  text(player.score, 890, 65);
+}
+
+//Dynamic "GAME OVER"! & "YOU WIN!" 
+
+void restart() {
+  if (player.health <=0 && key == 'r') {
+    setup();
   }
+}
 
-  //Dynamic "GAME OVER"!
 
-  void gameOver() { 
-    if (player.health <= 0) {
-      textSize(100);
-      text( " GAMER OVER! ", 200, 200);
-      if (player.health <=0 && key == 'r' ) {
-        setup();
-      }
-    }
+void gameOver() { 
   }
+  if (player.health <= 0) {
+    textSize(100); 
+    text( " GAMER OVER! ", 200, 200);
+    noLoop();
+  }
+  if (player.score == 10) {
+    textSize(100);
+    text(" YOU WIN!", 200, 200);
+    noLoop();
+  }
+}

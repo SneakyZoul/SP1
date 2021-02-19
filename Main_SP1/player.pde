@@ -10,14 +10,16 @@ class Player
   { 
     this.x = x;
     this.y = y; 
-    health = 100; 
+    health = 100;
   }
-  
+
   void takenDamage() 
   { 
-    health--; 
+    health--;
   } 
-  void increaseScore(){
-    score++;
+  void increaseScore() {
+    if (player.x == food.x && player.y == food.y) {
+      score++;
+    }
   }
 }
