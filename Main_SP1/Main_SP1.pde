@@ -1,9 +1,12 @@
 int size = 40; 
 int [][] grid = new int[25][25];
-int speed =0; 
-
+int speed =0;  
 Player player; 
 Enemy enemy; 
+Enemy enemy2;
+Enemy enemy3;
+Enemy enemy4;
+Enemy enemy5;
 Food food; 
 
 void setup()
@@ -11,10 +14,12 @@ void setup()
   size(1001, 1001);
 
   player = new Player(5, 6); 
-  enemy = new Enemy(20, 10, player); 
   food = new Food(2, 5, player); 
-
-  //grid[5][7] = 3;
+  enemy = new Enemy(20, 10, player); 
+  enemy2 = new Enemy(19, 9, player); 
+  enemy3 = new Enemy(19, 9, player); 
+  enemy4 = new Enemy(19, 9, player); 
+  enemy5 = new Enemy(19, 9, player);
 } 
 void draw() 
 { 
@@ -80,33 +85,44 @@ void resolveCollisions() {
 }
 
 
+
 //the units 
 void theUnits() 
 {
-try
-{
-  grid[player.x][player.y] = player.coll;
-  grid[enemy.x][enemy.y] = enemy.coll;  
-  enemy.MoveTowardsPlayer();  
-  grid[food.x][food.y] = food.coll;
-}
-catch(ArrayIndexOutOfBoundsException e)
-{
-}
+  try
+  {
+    grid[player.x][player.y] = player.coll;
+    grid[enemy.x][enemy.y] = enemy.coll;  
+
+    enemy.MoveTowardsPlayer();  
+    if (player.score >= 4) {
+      grid[enemy2.x] [enemy2.y] = enemy2.coll;
+      enemy2.MoveTowardsPlayer();
+    }
+    if (player.score >= 8) {
+      grid[enemy3.x] [enemy3.y] = enemy3.coll;
+      enemy3.MoveTowardsPlayer();
+    }
+    if (player.score >= 10) {
+      grid[enemy4.x] [enemy4.y] = enemy4.coll;
+      enemy4.MoveTowardsPlayer();
+    }
+    if (player.score >= 15) {
+      grid[enemy5.x] [enemy5.y] = enemy5.coll;
+      enemy5.MoveTowardsPlayer();
+    }
+    food.moveAwayFromPLayer();
+    grid[food.x][food.y] = food.coll;
+  }
+  catch(ArrayIndexOutOfBoundsException e)
+  {
+  }
 }
 
-void moveToAndFromPlayer()
-{
-  if (player.x < 0){
-    enemy.x = player.x; 
-    speed = speed -1; 
-  }
-  if (player.y < 0){ 
-    enemy.y = player.y; 
-    speed = speed +1; 
-    
-}
-}
+
+
+
+
 
 //color change
 
@@ -139,66 +155,78 @@ void keyPressed()
 {  
   if (key == 'w') 
   {
-    player.y--;
+    if (player.y > 0)
+    {
+      player.y--;
+    }
   }
   if (key == 's') 
   {
-    player.y++;
+    if ( player.y < 24)
+    {
+      player.y++;
+    }
   }
   if (key == 'd')
   {
-    player.x++;
+    if (player.x < 24)
+    {
+      player.x++;
+    }
   } 
   if (key == 'a')
   {
-    player.x--;
-  }
-}
-
-
-
-//Dynamci HP Bar & Dynamic Scoreboard
-void UI() {
-  stroke(0);
-  fill(150, 200);
-  rect(20, 20, 110, 80); 
-
-  textSize(20);
-  fill(200, 250);
-  text("HP", 32, 40);
-  fill(0);
-  text("HP", 30, 40);
-
-  fill(200, 0, 0, 230);
-  rect(25, 50, player.health, 40);
-  if (player.health > 0) {
-    rect(25, 50, player.health, 40);
-  } else if ( player.health <= 0) { 
-    player.health = 0; 
-  } 
-
-  stroke(0); 
-  fill(150, 200);
-  rect(890, 20, 100, 50);
-  textSize(20); 
-
-  fill(200, 250); 
-  text("SCORE", 893, 40);
-  fill(0); 
-  text("SCORE", 895, 40); 
-  textSize(25);
-  fill(200, 200, 0);
-  text(player.score, 890, 65);
-}
-
-//Dynamic scoreboard
-
-void gameOver() { 
-  if (player.health <= 0) {
-    textSize(100);
-    text( " GAMER OVER! ", 200, 200);
-    if (player.health <=0 && key == 'r' ) {
-      setup();
+    if ( player.x > 0)
+    {
+      player.x--;
     }
   }
-}
+  }
+
+
+
+  //Dynamci HP Bar & Dynamic Scoreboard
+  void UI() {
+    stroke(0);
+    fill(150, 200);
+    rect(20, 20, 110, 80); 
+
+    textSize(20);
+    fill(200, 250);
+    text("HP", 32, 40);
+    fill(0);
+    text("HP", 30, 40);
+
+    fill(200, 0, 0, 230);
+    rect(25, 50, player.health, 40);
+    if (player.health > 0) {
+      rect(25, 50, player.health, 40);
+    } else if ( player.health <= 0) { 
+      player.health = 0;
+    } 
+
+    stroke(0); 
+    fill(150, 200);
+    rect(890, 20, 100, 50);
+    textSize(20); 
+
+    fill(200, 250); 
+    text("SCORE", 893, 40);
+    fill(0); 
+    text("SCORE", 895, 40); 
+    textSize(25);
+    fill(200, 200, 0);
+    text(player.score, 890, 65);
+  }
+
+  //Dynamic "GAME OVER"!
+
+  void gameOver() { 
+    if (player.health <= 0) {
+      textSize(100);
+      text( " GAMER OVER! ", 200, 200);
+      if (player.health <=0 && key == 'r' ) {
+        setup();
+      }
+    }
+  }

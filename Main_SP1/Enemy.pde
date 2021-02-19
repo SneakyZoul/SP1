@@ -12,10 +12,18 @@ class Enemy
     this.y = y; 
     this.player = player;
     frameRate(15);
+
+    
   }
 
   void MoveTowardsPlayer()
   { 
+    
+       
+     
+    
+    
+    
     int h = (int)random(100);
     if (h < 50)
     {
@@ -25,19 +33,31 @@ class Enemy
       {
         if (i==0)
         {
+          if (enemy.x >0)
+          {
           x--;
+          }
         }
         if ( i==1)
         {
+        if (enemy.y >0)
+        {
           y--;
+        }
         }
         if (i ==2)
         {
+          if (enemy.x < 24)
+          {
           x++;
+          }
         }
         if (i ==3)
         {
+          if ( enemy.y < 24)
+          {
           y++;
+          }
         }
       }
     }
@@ -54,17 +74,29 @@ class Enemy
       {
         if (player.y > y)
         {
+          if (y < 24 ) 
+          {
           y++;
+          }
         } else
         {
+          if ( y > 0)
+          {
           y--;
+          }
         }
       } else { 
         if (player.x > x)
         {
-          x++;
+          if (x < 24)
+          {
+            x++;
+          }
         } else {
-          x--;
+          if (x > 0)
+          {
+            x--;
+          }
         }
       }
     }
