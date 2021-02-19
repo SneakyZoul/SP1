@@ -219,7 +219,7 @@ void restart() {
 
 
 void gameOver() { 
-  }
+  
   if (player.health <= 0) {
     textSize(100); 
     text( " GAMER OVER! ", 200, 200);
