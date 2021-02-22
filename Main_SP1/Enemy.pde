@@ -15,13 +15,7 @@ class Enemy
   }
 
   void MoveTowardsPlayer()
-  { 
-
-
-
-
-
-
+  {
     int h = (int)random(100);
     if (h < 50)
     {

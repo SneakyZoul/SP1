@@ -1,6 +1,5 @@
 class Food
 { 
-
   // data:
   int x;
   int y;
@@ -59,5 +58,4 @@ class Food
       }
     }
   }
-
 }
